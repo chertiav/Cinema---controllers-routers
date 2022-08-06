@@ -1,0 +1,36 @@
+.fetghing::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(51, 51, 51, 0.08);
+  z-index: 3;
+}
+
+.container-loader {
+  position: absolute;
+  top: 35%;
+  left: 45%;
+  z-index: 3;
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px dashed gray;
+  animation: rotate 1s infinite linear;
+  opacity: 1;
+  z-index: 4;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

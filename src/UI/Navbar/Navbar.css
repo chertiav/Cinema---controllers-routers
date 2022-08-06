@@ -1,0 +1,29 @@
+.navbar {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+.navbar li {
+  margin: 5px;
+  padding: 5px;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 4px;
+  background-color: rgb(25, 118, 210);
+}
+
+.navbar li a {
+  display: block;
+  padding: 2px;
+  color: #f1f1f1f1;
+}
+
+.navbar li:hover {
+  background-color: rgb(30, 150, 210);
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.navbar li:active {
+  background-color: rgb(35, 180, 210);
+}
