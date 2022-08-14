@@ -1,23 +1,33 @@
 // const fs = require('fs');
 // const os = require('os');
 // const path = require('path');
-const http =  require('http');
-
-const host = '127.0.0.1';
+// const http =  require('http');
+const summ = require('./testModule');
+const express = require('express');
 const port = 5000;
-const server = http.createServer((req, res) => {
+const app = express();
 
-	console.log('HEADERS', req.headers);
-	console.log('URL', req.url);
-	console.log('METHOD', req.method);
+app.use((req, res, next) => {
+	console.log(`1_Middleware`);
+	next();
+})
+app.use('/about', (req, res, next) => {
+	console.log(summ(15,2));
+	// res.send(`${summ(15,2)}`);
+	next();
+})
 
-	res.statusCode = 200;
-	res.setHeader('UserId', 10);
-	res.setHeader('Content-Type', 'text/html, charset=utf-8');
-	res.write('<h1>We will rock you</h1>');
-	res.end();
+app.get('/', (req,res) => {
+	console.log(`home`);
+	res.send('Hi everybody on home page')
 })
-//запуск сервера:
-server.listen(port, host, ()=>{
-	console.log(`Server has been started at ${host}:${port}`)
+app.get('/about', (req,res) => {
+	console.log(`about`);
+	res.send('Hi everybody on about page')
 })
+app.get('/contact', (req,res) => {
+	console.log(`contact`);
+	res.send('Hi everybody on contact page')
+})
+
+app.listen(port, () => console.log(`Server is started at ${port}`))
