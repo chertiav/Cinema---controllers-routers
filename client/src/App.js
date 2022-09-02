@@ -17,8 +17,8 @@ function App() {
 					<Route path="/actors/*" element={<Actors />}/>
 					<Route path="/directors/*" element={<Directors />}/>
 					<Route path="/studios/*" element={<Studios />}/>
-					<Route path="*" element={<Navigate to="/movies" replace={true}/>}/>
 					<Route index element={<HomePage />}/>
+					<Route path="*" element={<Navigate to="/movies" replace={true}/>}/>
 				</Route>
 			</Routes>
 		</Router>

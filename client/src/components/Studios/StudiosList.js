@@ -1,10 +1,11 @@
 import { Button, Grid, Stack } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useDispatch } from 'react-redux';
-import { deleteStudioAction } from '../../store/actions/studiosActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllStudiosAction, deleteStudioAction } from '../../store/actions/studiosActions';
+
 
 const mainListStyle = {
 	display: 'flex',
@@ -30,9 +31,16 @@ const mainListItemTitleStyle = {
 	backgroundColor: 'rgb(224, 224, 224)',
 }
 
-function StudiosList({studios}) {
+function StudiosList() {
 
+	const {studiosList: {studios}} = useSelector(state => state);
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(getAllStudiosAction())
+	}, [dispatch]);
+
+
 	const onDelete = (id) => {
 		dispatch(deleteStudioAction(id));
 	}
@@ -53,9 +61,9 @@ function StudiosList({studios}) {
 			{studios.length
 			? <ul style={mainListStyle}>
 					{studios.map(studio =>(
-						<li style={mainListItemStyle} key={studio.id}>
+						<li style={mainListItemStyle} key={studio.studio_id}>
 							<Link
-								to={`${studio.id}`}
+								to={`${studio.studio_id}`}
 								style={mainListItemTitleStyle}
 								onMouseEnter={handleMouseEnter}
 								onMouseLeave={handleMouseLeave}
@@ -64,7 +72,7 @@ function StudiosList({studios}) {
 								{studio.title}
 							</Link>
 							<Stack marginRight={1}>
-								<Link to={`new/${studio.id}`} >
+								<Link to={`new/${studio.studio_id}`} >
 									<Button
 										variant="contained"
 										color = 'warning'
@@ -79,7 +87,7 @@ function StudiosList({studios}) {
 									color = 'error'
 									size='large'
 									startIcon={<DeleteIcon/>}
-									onClick={() => onDelete(studio.id)}
+									onClick={() => onDelete(studio.studio_id)}
 								/>
 							</Stack>
 						</li>

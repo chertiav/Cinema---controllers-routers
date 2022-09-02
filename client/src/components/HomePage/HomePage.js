@@ -1,20 +1,43 @@
-import { Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
-import { titleApp } from '../../model/model';
+import Carousel from 'react-material-ui-carousel'
+import { posters } from '../../model/model';
 
 const styles = {
-	color: 'rgb(25, 118, 210)',
-	justifySelf: 'center',
-	alignItems: 'center',
-	fontSize: '2rem',
-	marginTop: '10%'
+	imgContainerStyle: {
+		position: 'relative',
+		maxWidth: '100%',
+		height: '70vh',
+		overflow: 'hidden',
+		color: "red"
+	},
+	imgStyle: {
+		borderRadius: '15px',
+		padding: '5px',
+		maxWidth: '100%',
+		maxHeight: '100%',
+		position: 'absolute',
+		left: '50%',
+    transform: 'translate(-50%, 0)',
+		objectFit: 'contain'
+	}
 }
 
 function HomePage() {
+
 	return (
-		<Stack style={styles}>
-				{titleApp} APP
-		</Stack>
+		<>
+		<Carousel>
+			{posters.map(poster => {
+				return (
+					<Box key={poster.id} style={styles.imgContainerStyle}>
+						<img src={poster.url} alt={poster.alt} style={styles.imgStyle}/>
+					</Box>
+				)
+			})}
+		</Carousel>
+		</>
+
 	)
 }
 

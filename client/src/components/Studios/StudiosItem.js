@@ -1,7 +1,10 @@
 import { Box, Button, Grid, Stack } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emptyStudio } from '../../model/model';
+import { getOneStudioAction } from '../../store/actions/studiosActions';
+
 
 const imgContainerStyle = {
   position: 'relative',
@@ -39,14 +42,22 @@ const itemTitleStyle = {
   color: 'rgb(25, 118, 210)'
 }
 
-function StudiosItem({studios}) {
+function StudiosItem() {
 
 	const {id} = useParams();
-	const studiosFilm = studios.find(studio => studio.id === parseInt(id));
+	const dispatch = useDispatch();
+	const {studiosList: {studios}} = useSelector(state => state);
+	const [studiosFilm] = studios;
+	const studio = studiosFilm ? studiosFilm : emptyStudio;
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		dispatch(getOneStudioAction(id))
+	}, [dispatch, id]);
+
+
 	const withGridBlockImg = 4;
 	const withGridBlockContent = 8;
-	const studio = studiosFilm ? studiosFilm : emptyStudio;
 
 	return (
 		<Box>
@@ -74,7 +85,7 @@ function StudiosItem({studios}) {
 								{studio.location}
 							</li>
 							<li style={itemStyle}>
-								<span style={itemTitleStyle}>foundation year: </span>{studio.foundationYear}
+								<span style={itemTitleStyle}>foundation year: </span>{studio.found_year}
 							</li>
 							<li style={itemStyle}>
 								<span style={itemTitleStyle}>movies: </span>

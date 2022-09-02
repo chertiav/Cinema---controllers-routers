@@ -5,7 +5,7 @@ const pool = new Pool({
 	password:'qwerty',
 	host: 'localhost',
 	port: 5432,
-	database: 'cinema-one'
+	database: 'cinema'
 });
 
 module.exports = pool;

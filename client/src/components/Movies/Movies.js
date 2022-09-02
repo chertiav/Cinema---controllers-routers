@@ -1,19 +1,11 @@
 import { Button, Stack } from '@mui/material';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Navigate, Route, Link, Routes } from 'react-router-dom'
-import { getAllMoviesAction } from '../../store/actions/moviesActions';
 import MovieItem from './MovieItem';
 import MovieList from './MovieList';
 
 function Movies() {
 
-	const {moviesList: {movies}} = useSelector(state => state);
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		dispatch(getAllMoviesAction())
-	}, [dispatch]);
 
 	return (
 		<>
@@ -25,8 +17,8 @@ function Movies() {
 				</Link>
 			</Stack>
 			<Routes>
-				<Route path=':id' element={<MovieItem movies={movies}/>}/>
-				<Route path='/' element={<MovieList movies={movies}/>}/>
+				<Route path=':id' element={<MovieItem />}/>
+				<Route path='/' element={<MovieList />}/>
 				<Route path='new' element={<Navigate to='/movies/new/:id'/>} />
 			</Routes>
 		</>

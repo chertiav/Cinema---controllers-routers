@@ -15,6 +15,22 @@ import ACTIONS_TYPES from './actionsTypes'
 		type: ACTIONS_TYPES.GET_ACTORS_ERROR,
 		payload
 	})
+	//Get One
+	export const getOneActorAction = (payload) => ({
+		type: ACTIONS_TYPES.GET_ACTOR_ACTIONS,
+		payload
+	})
+	export const getOneActorRequest = () => ({
+		type: ACTIONS_TYPES.GET_ACTOR_REQUEST,
+	})
+	export const getOneActorSuccess = (payload) => ({
+		type: ACTIONS_TYPES.GET_ACTOR_SUCCESS,
+		payload
+	})
+	export const getOneActorError = (payload) => ({
+		type: ACTIONS_TYPES.GET_ACTOR_ERROR,
+		payload
+	})
 //Сreate
 	export const createActorAction = (payload) => ({
 		type: ACTIONS_TYPES.POST_ACTOR_ACTIONS,

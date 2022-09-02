@@ -1,6 +1,6 @@
 import { put } from 'redux-saga/effects';
 import dataService from '../API/cinema-service';
-import { createStudioError, createStudioRequest, createStudioSuccess, deleteStudioError, deleteStudioRequest, deleteStudioSuccess, getAllStudiosError, getAllStudiosRequest, getAllStudiosSuccess, updateStudioError, updateStudioRequest, updateStudioSuccess } from '../store/actions/studiosActions';
+import { createStudioError, createStudioRequest, createStudioSuccess, deleteStudioError, deleteStudioRequest, deleteStudioSuccess, getAllStudiosError, getAllStudiosRequest, getAllStudiosSuccess, getOneStudioError, getOneStudioRequest, getOneStudioSuccess, updateStudioError, updateStudioRequest, updateStudioSuccess } from '../store/actions/studiosActions';
 
 export function* getAllStudiosSaga() {
 	yield put(getAllStudiosRequest());
@@ -10,6 +10,16 @@ export function* getAllStudiosSaga() {
 		yield put(getAllStudiosSuccess(studios))
 	} catch (error) {
 		yield put(getAllStudiosError(error))
+	}
+}
+export function* getOneStudioSaga({payload}) {
+	yield put(getOneStudioRequest());
+	try {
+		const studio = yield dataService.get(`/studios/${payload}`)
+			.then(({data}) => data);
+		yield put(getOneStudioSuccess(studio))
+	} catch (error) {
+		yield put(getOneStudioError(error))
 	}
 }
 export function* createStudioSaga({payload}) {
@@ -25,7 +35,7 @@ export function* createStudioSaga({payload}) {
 export function* updateStudioSaga({payload}) {
 	yield put(updateStudioRequest());
 	try {
-		const updateStudio = yield dataService.put(`/studios/${payload.id}`, payload)
+		const updateStudio = yield dataService.put(`/studios`, payload)
 			.then(({data}) => data);
 		yield put(updateStudioSuccess(updateStudio))
 	} catch (error) {

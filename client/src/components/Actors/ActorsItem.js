@@ -1,7 +1,9 @@
 import { Box, Button, Grid, Stack } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emptyActor } from '../../model/model';
+import { getOneActorAction } from '../../store/actions/actorsActions';
 
 const imgContainerStyle = {
   position: 'relative',
@@ -39,14 +41,21 @@ const itemTitleStyle = {
   color: 'rgb(25, 118, 210)'
 }
 
-function ActorsItem({actors}) {
+function ActorsItem() {
 
 	const {id} = useParams();
-	const actorFilm = actors.find(actor => actor.id === parseInt(id))
+	const dispatch = useDispatch();
+	const {actorsList: {actors}} = useSelector(state => state);
+	const [actorFilm] = actors;
+	const actor = actorFilm ? actorFilm : emptyActor;
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		dispatch(getOneActorAction(id))
+	}, [dispatch, id]);
+
 	const withGridBlockImg = 4;
 	const withGridBlockContent = 8;
-	const actor = actorFilm ? actorFilm : emptyActor;
 
 	return (
 		<Box>
@@ -66,11 +75,15 @@ function ActorsItem({actors}) {
 					<ul style={listItemStyle}>
 						<li style={itemStyle}>
 							<span style={itemTitleStyle}>full name: </span>
-							{actor.fullName}
+							{actor.full_name}
 						</li>
 						<li style={itemStyle}>
 							<span style={itemTitleStyle}>birth year: </span>
-							{actor.birthYear}
+							{actor.birth_year}
+						</li>
+						<li style={itemStyle}>
+							<span style={itemTitleStyle}>death year: </span>
+							{actor.death_year}
 						</li>
 						<li style={itemStyle}>
 							<span style={itemTitleStyle}>nationality: </span>
@@ -78,7 +91,7 @@ function ActorsItem({actors}) {
 						</li>
 						<li style={itemStyle}>
 							<span style={itemTitleStyle}>movies: </span>
-							{actor.movies.join(', ')}
+							{actor.movies}
 						</li>
 					</ul>
 					<Button

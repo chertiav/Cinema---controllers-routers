@@ -15,6 +15,22 @@ import ACTIONS_TYPES from './actionsTypes'
 		type: ACTIONS_TYPES.GET_MOVIES_ERROR,
 		payload
 	})
+//Get One
+	export const getOneMovieAction = (payload) => ({
+		type: ACTIONS_TYPES.GET_MOVIE_ACTIONS,
+		payload
+	})
+	export const getOneMovieRequest = () => ({
+		type: ACTIONS_TYPES.GET_MOVIE_REQUEST,
+	})
+	export const getOneMovieSuccess = (payload) => ({
+		type: ACTIONS_TYPES.GET_MOVIE_SUCCESS,
+		payload
+	})
+	export const getOneMovieError = (payload) => ({
+		type: ACTIONS_TYPES.GET_MOVIE_ERROR,
+		payload
+	})
 //Create
 	export const createMovieAction = (payload) => ({
 		type: ACTIONS_TYPES.POST_MOVIE_ACTIONS,

@@ -8,81 +8,64 @@ const initislState= {
 
 const directorsReducer = (state = initislState, {type, payload}) => {
 	switch (type) {
-	//Get All
+		//Get All
 		case ACTIONS_TYPES.GET_DIRECTORS_SUCCESS:
 			return {
 				...state,
 				directors: payload,
 				isFetching: false,
 			}
-		case ACTIONS_TYPES.GET_DIRECTORS_REQUEST:
+		//Get One
+		case ACTIONS_TYPES.GET_DIRECTOR_SUCCESS:
 			return {
 				...state,
-				isFetching: true,
-			}
-		case ACTIONS_TYPES.GET_DIRECTORS_ERROR:
-			return {
-				...state,
+				directors: [payload],
 				isFetching: false,
-				error: payload,
 			}
-	//Create
+		//Create
 		case ACTIONS_TYPES.POST_DIRECTOR_SUCCESS:
 			return {
 				...state,
 				directors: [...state.directors, payload],
 				isFetching: false,
 			}
-		case ACTIONS_TYPES.POST_DIRECTOR_REQUEST:
-			return {
-				...state,
-				isFetching: true,
-			}
-		case ACTIONS_TYPES.POST_DIRECTOR_ERROR:
-			return {
-				...state,
-				isFetching: false,
-				error: payload,
-			}
-	//Update
+		//Update
 		case ACTIONS_TYPES.PUT_DIRECTOR_SUCCESS:
 			return {
 				...state,
-				directors: state.directors.map(director => director.id === payload.id ? payload : director),
+				directors: state.directors.map(director => director.director_id === payload.director_id ? payload : director),
 				isFetching: false,
 			}
-		case ACTIONS_TYPES.PUT_DIRECTOR_REQUEST:
-			return {
-				...state,
-				isFetching: true,
-			}
-		case ACTIONS_TYPES.PUT_DIRECTOR_ERROR:
-			return {
-				...state,
-				isFetching: false,
-				error: payload,
-			}
-	//Delete
+		//Delete
 		case ACTIONS_TYPES.DEL_DIRECTOR_SUCCESS:
 			return {
 				...state,
-				directors: [...state.directors.filter(director => director.id !== payload)],
+				directors: [...state.directors.filter(director => director.director_id !== payload)],
 				isFetching: false,
 			}
+		//GROUPING_*_REQUEST
+		case ACTIONS_TYPES.GET_DIRECTORS_REQUEST:
+		case ACTIONS_TYPES.GET_DIRECTOR_REQUEST:
+		case ACTIONS_TYPES.POST_DIRECTOR_REQUEST:
+		case ACTIONS_TYPES.PUT_DIRECTOR_REQUEST:
 		case ACTIONS_TYPES.DEL_DIRECTOR_REQUEST:
 			return {
 				...state,
 				isFetching: true,
 			}
+		//GROUPING_*_ERROR
+		case ACTIONS_TYPES.GET_DIRECTORS_ERROR:
+		case ACTIONS_TYPES.GET_DIRECTOR_ERROR:
+		case ACTIONS_TYPES.POST_DIRECTOR_ERROR:
+		case ACTIONS_TYPES.PUT_DIRECTOR_ERROR:
 		case ACTIONS_TYPES.DEL_DIRECTOR_ERROR:
 			return {
-				...state,
-				isFetching: false,
-				error: payload,
+					...state,
+					isFetching: false,
+					error: payload,
 			}
 		default: return state;
 	}
 }
-
 export default directorsReducer;
 

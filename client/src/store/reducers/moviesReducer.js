@@ -8,81 +8,64 @@ const initislState= {
 
 const moviesReducer = (state = initislState, {type, payload}) => {
 	switch (type) {
-	//Get All
+		//Get All
 		case ACTIONS_TYPES.GET_MOVIES_SUCCESS:
 			return {
 				...state,
 				movies: payload,
 				isFetching: false,
 			}
-		case ACTIONS_TYPES.GET_MOVIES_REQUEST:
+		//Get One
+		case ACTIONS_TYPES.GET_MOVIE_SUCCESS:
 			return {
 				...state,
-				isFetching: true,
-			}
-		case ACTIONS_TYPES.GET_MOVIES_ERROR:
-			return {
-				...state,
+				movies: [payload],
 				isFetching: false,
-				error: payload,
 			}
-	//Create
+		//Create
 		case ACTIONS_TYPES.POST_MOVIE_SUCCESS:
 			return {
 				...state,
 				movies: [...state.movies, payload],
 				isFetching: false,
 			}
+		//Update
+		case ACTIONS_TYPES.PUT_MOVIE_SUCCESS:
+			return {
+				...state,
+				movies: state.movies.map(movie => movie.movie_id === payload.movie_id ? payload : movie),
+				isFetching: false,
+			}
+		//Delete
+		case ACTIONS_TYPES.DEL_MOVIE_SUCCESS:
+			return {
+				...state,
+				movies: [...state.movies.filter(movie => movie.movie_id !== payload)],
+				isFetching: false,
+			}
+		//GROUPING_*_REQUEST
+		case ACTIONS_TYPES.GET_MOVIES_REQUEST:
+		case ACTIONS_TYPES.GET_MOVIE_REQUEST:
 		case ACTIONS_TYPES.POST_MOVIE_REQUEST:
+		case ACTIONS_TYPES.PUT_MOVIE_REQUEST:
+		case ACTIONS_TYPES.DEL_MOVIE_REQUEST:
 			return {
 				...state,
 				isFetching: true,
 			}
+		//GROUPING_*_ERROR
+		case ACTIONS_TYPES.GET_MOVIES_ERROR:
+		case ACTIONS_TYPES.GET_MOVIE_ERROR:
 		case ACTIONS_TYPES.POST_MOVIE_ERROR:
-			return {
+		case ACTIONS_TYPES.PUT_MOVIE_ERROR:
+		case ACTIONS_TYPES.DEL_MOVIE_ERROR:
+		return {
 				...state,
 				isFetching: false,
 				error: payload,
 			}
-	//Update
-	case ACTIONS_TYPES.PUT_MOVIE_SUCCESS:
-		return {
-			...state,
-			movies: state.movies.map(movie => movie.id === payload.id ? payload : movie),
-			isFetching: false,
-		}
-	case ACTIONS_TYPES.PUT_MOVIE_REQUEST:
-		return {
-			...state,
-			isFetching: true,
-		}
-	case ACTIONS_TYPES.PUT_MOVIE_ERROR:
-		return {
-			...state,
-			isFetching: false,
-			error: payload,
-		}
-//Delete
-	case ACTIONS_TYPES.DEL_MOVIE_SUCCESS:
-		return {
-			...state,
-			movies: [...state.movies.filter(movie => movie.id !== payload)],
-			isFetching: false,
-		}
-	case ACTIONS_TYPES.DEL_MOVIE_REQUEST:
-		return {
-			...state,
-			isFetching: true,
-		}
-	case ACTIONS_TYPES.DEL_MOVIE_ERROR:
-		return {
-			...state,
-			isFetching: false,
-			error: payload,
-		}
-	default: return state;
+		default: return state;
 	}
 }
-
 export default moviesReducer;
 

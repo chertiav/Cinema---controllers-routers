@@ -15,6 +15,22 @@ import ACTIONS_TYPES from './actionsTypes'
 		type: ACTIONS_TYPES.GET_STUDIOS_ERROR,
 		payload
 	})
+//Get One
+	export const getOneStudioAction = (payload) => ({
+		type: ACTIONS_TYPES.GET_STUDIO_ACTIONS,
+		payload
+	})
+	export const getOneStudioRequest = () => ({
+		type: ACTIONS_TYPES.GET_STUDIO_REQUEST,
+	})
+	export const getOneStudioSuccess = (payload) => ({
+		type: ACTIONS_TYPES.GET_STUDIO_SUCCESS,
+		payload
+	})
+	export const getOneStudioError = (payload) => ({
+		type: ACTIONS_TYPES.GET_STUDIO_ERROR,
+		payload
+	})
 //Create
 	export const createStudioAction = (payload) => ({
 		type: ACTIONS_TYPES.POST_STUDIO_ACTIONS,

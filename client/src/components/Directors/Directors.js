@@ -1,19 +1,10 @@
 import { Button, Stack } from '@mui/material';
-import React, { useEffect }from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Link, Navigate, Route, Routes } from 'react-router-dom';
 import DirectorsItem from './DirectorsItem';
 import DirectorsList from './DirectorsList';
-import { getAllDirectorsAction } from '../../store/actions/directorsActions';
 
 function Directors() {
-
-	const {directorsList: {directors}} = useSelector(state => state);
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		dispatch(getAllDirectorsAction())
-	}, [dispatch]);
 
 	return (
 		<>
@@ -24,8 +15,8 @@ function Directors() {
 					</Button>
 				</Link>
 				<Routes>
-					<Route path=':id' element={<DirectorsItem directors={directors}/>}></Route>
-					<Route path='/' element={<DirectorsList directors={directors}/>}></Route>
+					<Route path=':id' element={<DirectorsItem />}></Route>
+					<Route path='/' element={<DirectorsList />}></Route>
 					<Route path='new' element={<Navigate to='/directors/new/:id'/>}></Route>
 				</Routes>
 			</Stack>

@@ -1,7 +1,10 @@
 import { Box, Button, Grid, Stack } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emptyDirector } from '../../model/model';
+import { getOneDirectorAction } from '../../store/actions/directorsActions';
+
 
 const imgContainerStyle = {
   position: 'relative',
@@ -39,12 +42,19 @@ const itemTitleStyle = {
   color: 'rgb(25, 118, 210)'
 }
 
-function DirectorsItem({directors}) {
+function DirectorsItem() {
 
 	const {id} = useParams();
-	const navigate = useNavigate();
-	const directorFilm = directors.find(director => director.id === parseInt(id));
+	const dispatch = useDispatch();
+	const {directorsList: {directors}} = useSelector(state => state);
+	const [directorFilm] =directors;
+	console.log(directorFilm);
 	const director = directorFilm ? directorFilm : emptyDirector;
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		dispatch(getOneDirectorAction(id))
+	}, [dispatch, id]);
 
 	const withGridBlockImg = 4;
 	const withGridBlockContent = 8;
@@ -67,11 +77,15 @@ function DirectorsItem({directors}) {
 					<ul style={listItemStyle}>
 						<li style={itemStyle}>
 							<span style={itemTitleStyle}>full name: </span>
-							{director.fullName}
+							{director.full_name}
 						</li>
 						<li style={itemStyle}>
 							<span style={itemTitleStyle}>birth year: </span>
-							{director.birthYear}
+							{director.birth_year}
+						</li>
+						<li style={itemStyle}>
+							<span style={itemTitleStyle}>death year: </span>
+							{director.death_year}
 						</li>
 						<li style={itemStyle}>
 							<span style={itemTitleStyle}>nationality: </span>
@@ -79,7 +93,7 @@ function DirectorsItem({directors}) {
 						</li>
 						<li style={itemStyle}>
 							<span style={itemTitleStyle}>movies: </span>
-							{director.movies.join(', ')}
+							{director.movies}
 						</li>
 					</ul>
 					<Button

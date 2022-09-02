@@ -15,6 +15,22 @@ import ACTIONS_TYPES from './actionsTypes'
 		type: ACTIONS_TYPES.GET_DIRECTORS_ERROR,
 		payload
 	})
+	//Get One
+	export const getOneDirectorAction = (payload) => ({
+		type: ACTIONS_TYPES.GET_DIRECTOR_ACTIONS,
+		payload
+	})
+	export const getOneDirectorRequest = () => ({
+		type: ACTIONS_TYPES.GET_DIRECTOR_REQUEST,
+	})
+	export const getOneDirectorSuccess = (payload) => ({
+		type: ACTIONS_TYPES.GET_DIRECTOR_SUCCESS,
+		payload
+	})
+	export const getOneDirectorError = (payload) => ({
+		type: ACTIONS_TYPES.GET_DIRECTOR_ERROR,
+		payload
+	})
 //Create
 	export const createDirectorAction = (payload) => ({
 		type: ACTIONS_TYPES.POST_DIRECTOR_ACTIONS,

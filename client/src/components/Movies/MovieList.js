@@ -1,10 +1,10 @@
 import { Button, Grid, Stack } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteMovieAction } from '../../store/actions/moviesActions';
+import { deleteMovieAction, getAllMoviesAction } from '../../store/actions/moviesActions';
 
 const mainListStyle = {
 	display: 'flex',
@@ -30,9 +30,16 @@ const mainListItemTitleStyle = {
 	backgroundColor: 'rgb(224, 224, 224)',
 }
 
-function MovieList({movies}) {
+function MovieList() {
 
+	const {moviesList: {movies}} = useSelector(state => state);
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(getAllMoviesAction())
+	}, [dispatch]);
+
+
 	const onDelete = (id) => {
 		dispatch(deleteMovieAction(id));
 	}
@@ -53,9 +60,9 @@ function MovieList({movies}) {
 			{movies.length
 			? <ul style={mainListStyle}>
 					{movies.map(movie =>(
-						<li style={mainListItemStyle} key={movie.id}>
+						<li style={mainListItemStyle} key={movie.movie_id}>
 							<Link
-								to={`${movie.id}`}
+								to={`${movie.movie_id}`}
 								style={mainListItemTitleStyle}
 								onMouseEnter={handleMouseEnter}
 								onMouseLeave={handleMouseLeave}
@@ -64,7 +71,7 @@ function MovieList({movies}) {
 								{movie.title}
 							</Link>
 							<Stack marginRight={1}>
-								<Link to={`new/${movie.id}`} >
+								<Link to={`new/${movie.movie_id}`} >
 									<Button
 										variant="contained"
 										color = 'warning'
@@ -79,7 +86,7 @@ function MovieList({movies}) {
 									color = 'error'
 									size='large'
 									startIcon={<DeleteIcon/>}
-									onClick={() => onDelete(movie.id)}
+									onClick={() => onDelete(movie.movie_id)}
 								/>
 							</Stack>
 						</li>

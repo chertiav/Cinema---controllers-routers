@@ -1,6 +1,6 @@
 import { put } from 'redux-saga/effects';
 import dataService from '../API/cinema-service';
-import { createDirectorError, createDirectorRequest, createDirectorSuccess, deleteDirectorError, deleteDirectorRequest, deleteDirectorSuccess, getAllDirectorsError, getAllDirectorsRequest, getAllDirectorsSuccess, updateDirectorError, updateDirectorRequest, updateDirectorSuccess } from '../store/actions/directorsActions';
+import { createDirectorError, createDirectorRequest, createDirectorSuccess, deleteDirectorError, deleteDirectorRequest, deleteDirectorSuccess, getAllDirectorsError, getAllDirectorsRequest, getAllDirectorsSuccess, getOneDirectorError, getOneDirectorRequest, getOneDirectorSuccess, updateDirectorError, updateDirectorRequest, updateDirectorSuccess } from '../store/actions/directorsActions';
 
 export function* getAllDirectorsSaga() {
 	yield put(getAllDirectorsRequest());
@@ -10,6 +10,16 @@ export function* getAllDirectorsSaga() {
 		yield put(getAllDirectorsSuccess(directors))
 	} catch (error) {
 		yield put(getAllDirectorsError(error))
+	}
+}
+export function* getOneDirectorSaga({payload}) {
+	yield put(getOneDirectorRequest());
+	try {
+		const director = yield dataService.get(`/directors/${payload}`)
+			.then(({data}) => data);
+		yield put(getOneDirectorSuccess(director))
+	} catch (error) {
+		yield put(getOneDirectorError(error))
 	}
 }
 export function* createDirectorSaga({payload}) {
@@ -25,7 +35,7 @@ export function* createDirectorSaga({payload}) {
 export function* updateDirectorSaga({payload}) {
 	yield put(updateDirectorRequest());
 	try {
-		const updateDirector = yield dataService.put(`/directors/${payload.id}`, payload)
+		const updateDirector = yield dataService.put(`/directors`, payload)
 			.then(({data}) => data);
 		yield put(updateDirectorSuccess(updateDirector))
 	} catch (error) {

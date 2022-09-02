@@ -1,6 +1,6 @@
 import { put } from 'redux-saga/effects';
 import dataService from '../API/cinema-service';
-import { createMovieError, createMovieRequest, createMovieSuccess, deleteMovieError, deleteMovieRequest, deleteMovieSuccess, getAllMoviesError, getAllMoviesRequest, getAllMoviesSuccess, updateMovieError, updateMovieRequest, updateMovieSuccess } from '../store/actions/moviesActions';
+import { createMovieError, createMovieRequest, createMovieSuccess, deleteMovieError, deleteMovieRequest, deleteMovieSuccess, getAllMoviesError, getAllMoviesRequest, getAllMoviesSuccess, getOneMovieError, getOneMovieRequest, getOneMovieSuccess, updateMovieError, updateMovieRequest, updateMovieSuccess } from '../store/actions/moviesActions';
 
 export function* getAllMoviesSaga() {
 	yield put(getAllMoviesRequest());
@@ -10,6 +10,16 @@ export function* getAllMoviesSaga() {
 		yield put(getAllMoviesSuccess(movies))
 	} catch (error) {
 		yield put(getAllMoviesError(error))
+	}
+}
+export function* getOneMovieSaga({payload}) {
+	yield put(getOneMovieRequest());
+	try {
+		const movie = yield dataService.get(`/movies/${payload}`)
+			.then(({data}) => data);
+		yield put(getOneMovieSuccess(movie))
+	} catch (error) {
+		yield put(getOneMovieError(error))
 	}
 }
 export function* createMovieSaga({payload}) {
@@ -25,7 +35,7 @@ export function* createMovieSaga({payload}) {
 export function* updateMovieSaga({payload}) {
 	yield put(updateMovieRequest());
 	try {
-		const updateMovie = yield dataService.put(`/movies/${payload.id}`, payload)
+		const updateMovie = yield dataService.put(`/movies`, payload)
 			.then(({data}) => data);
 		yield put(updateMovieSuccess(updateMovie))
 	} catch (error) {

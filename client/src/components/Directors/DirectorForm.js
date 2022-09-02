@@ -17,7 +17,7 @@ import { createDirectorAction, updateDirectorAction } from '../../store/actions/
 const style ={
 	styleSelectedFirst: {
 		padding:'5px',
-		fontSize:"1rem",
+		fontSize:"0.7rem",
 		outline:'none',
 		borderRadius:'4px'
 	},
@@ -56,37 +56,29 @@ function DirectorForm() {
 	const dispatch = useDispatch();
 	const {directorsList: {directors}} = useSelector(state => state);
 	const navigate = useNavigate();
-	const currentDirector = directors.find(director => director.id === parseInt(id));
+	const currentDirector = directors.find(director => director.director_id === parseInt(id));
 	const goHome = () => navigate('/directors');
-	const onDirectorSubmit = (values, actions) => {
-		!values.id
-			? dispatch(createDirectorAction({...values, id: Date.now()}))
-			: dispatch(updateDirectorAction(values));
+	const onDirectorSubmit = (values) => {
+		const newValues = {...values}
+		if (newValues.birth_year === "") {
+			newValues.birth_year = null
+		}
+		if (newValues.death_year === "") {
+			newValues.death_year = null
+		}
+		!values.director_id
+			? dispatch(createDirectorAction(newValues))
+			: dispatch(updateDirectorAction(newValues));
 		goHome();
 	};
 	const schema = Yup.object().shape({
-		fullName: Yup.string()
-			.required('Field is required'),
-		birthYear: Yup.number()
-			.required('Field is required'),
-		nationality: Yup.string()
+		full_name: Yup.string()
 			.required('Field is required'),
 	});
-	const createYearList =() => {
-		let arrayYear = [];
-		for (let year = 1900; year < (new Date().getFullYear()-10); year++) {
-			arrayYear.push(year)
-		}
-		return arrayYear
-	}
-	const arrayYear = createYearList();
 
 	const withLabel = 2.5;
 	const withInput = 9.5;
-	const withInputYear = 2;
-	const withErrorYear = 4.5;
-	const withInputNationality = 5;
-	const withErrorNationality = 7.5;
+	const withInputYear = 3;
 	const defaultColor = 'rgb(25, 118, 210)';
 
 	const renderForm = (props) => {
@@ -95,34 +87,38 @@ function DirectorForm() {
 				<Stack>
 					<Grid container marginTop={1} marginBottom={1} flexDirection='row' spacing={1} alignItems={'center'}>
 						<Grid item color = {defaultColor} lg={withLabel} md={withLabel} xl={withLabel} sm={withLabel} xs={withLabel}>
-							<label htmlFor='fullName'>Full name</label>
+							<label htmlFor='full_name'>Full name</label>
 						</Grid>
 						<Grid item color = {defaultColor} lg={withInput} md={withInput} xl={withInput} sm={withInput} xs={withInput}>
-							<Field name='fullName' placeholder='full name'></Field>
+							<Field name='full_name' placeholder='full name'></Field>
 						</Grid>
 					</Grid>
-					<ErrorMessage name='fullName'>
+					<ErrorMessage name='full_name'>
 						{msg => <Stack alignItems={'center'} className="error">{msg}</Stack>}
 					</ErrorMessage>
 				</Stack>
 				<Stack >
-					<Grid container marginTop={1} marginBottom={1} flexDirection='row' spacing={1} alignItems={'center'}>
+				<Grid container marginTop={1} marginBottom={1} flexDirection='row' spacing={1} alignItems={'center'}>
 						<Grid item color = {defaultColor} lg={withLabel} md={withLabel} xl={withLabel} sm={withLabel} xs={withLabel}>
-							<label htmlFor='birthYear'>Birth year</label>
+							<label htmlFor='birth_year'>Birth year</label>
 						</Grid>
 						<Grid item color = {defaultColor} lg={withInputYear} md={withInputYear} xl={withInputYear} sm={withInputYear} xs={withInputYear}>
-							<Field name='birthYear' as="select" style={style.styleSelectedFirst}>
-								<option disabled value=''>year</option>
-								{arrayYear.map(year =>
-									<option key={year} value={year}>{year}</option>
-								)}
-							</Field>
-
+							<Field
+								name='birth_year'
+								type='date'
+								style={style.styleSelectedFirst}
+								/>
 						</Grid>
 						<Grid item color = {defaultColor} lg={withLabel} md={withLabel} xl={withLabel} sm={withLabel} xs={withLabel}>
+							<label htmlFor='death_year'>Death year</label>
+						</Grid>
+						<Grid item color = {defaultColor} lg={withInputYear} md={withInputYear} xl={withInputYear} sm={withInputYear} xs={withInputYear}>
+							<Field name='death_year' type='date' style={style.styleSelectedFirst}/>
+						</Grid>
+						<Grid item color = {defaultColor} lg={4} md={4} xl={4} sm={4} xs={4}>
 							<label htmlFor='nationality'>Nationality</label>
 						</Grid>
-						<Grid item color = {defaultColor} lg={withInputNationality} md={withInputNationality} xl={withInputNationality} sm={withInputNationality} xs={withInputNationality}>
+						<Grid item color = {defaultColor} lg={8} md={8} xl={8} sm={8} xs={8}>
 							<Field name='nationality' as="select" style={style.styleSelectedSecond}>
 								<option disabled value='' placeholder='national'>nationality</option>
 								{nationalities.map(nationality =>
@@ -131,28 +127,17 @@ function DirectorForm() {
 							</Field>
 						</Grid>
 					</Grid>
-					<Grid container flexDirection='row' spacing={1} alignItems={'center'}>
-						<Grid item lg={withErrorYear} md={withErrorYear} xl={withErrorYear} sm={withErrorYear} xs={withErrorYear}>
-							<ErrorMessage name='birthYear'>
-								{msg => <Stack alignItems={'center'} className="error">{msg}</Stack>}
-							</ErrorMessage>
-						</Grid>
-						<Grid item lg={withErrorNationality} md={withErrorNationality} xl={withErrorNationality} sm={withErrorNationality} xs={withErrorNationality}>
-							<ErrorMessage name='nationality'>
-								{msg => <Stack alignItems={'center'} className="error">{msg}</Stack>}
-							</ErrorMessage>
-						</Grid>
-					</Grid>
 				</Stack>
 				<fieldset style={style.fieldsetStyle}>
 					<legend style={style.legendStyle}>
 						Movies
 					</legend>
-					<FieldArray name="movies"  >
-						{({push, remove, form: {values: {movies}}}) => {
+					<FieldArray name="movies">
+						{({push, remove, form: {values: {movies}} }) => {
 							return (
 								<Stack spacing={2}>
-									{movies.map((_, index) => (
+									{
+										movies.map(element => element ? element : '').map((_, index) => (
 										<Stack key={index} direction="row" spacing={2}>
 											<Field name={`movies[${index}]`} placeholder='movie'></Field>
 											{index > 0 && (
@@ -177,7 +162,7 @@ function DirectorForm() {
 									))}
 								</Stack>
 							)
-						}}
+						 }}
 					</FieldArray>
 				</fieldset>
 				<Stack direction='row' spacing={2} color = {defaultColor}>

@@ -1,19 +1,11 @@
 import { Button, Stack } from '@mui/material';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Link, Navigate, Route, Routes } from 'react-router-dom';
-import { getAllStudiosAction } from '../../store/actions/studiosActions';
 import StudiosItem from './StudiosItem';
 import StudiosList from './StudiosList';
 
 function Studios() {
 
-	const {studiosList: {studios}} = useSelector(state => state);
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		dispatch(getAllStudiosAction())
-	}, [dispatch]);
 
 	return (
 		<>
@@ -25,8 +17,8 @@ function Studios() {
 				</Link>
 			</Stack>
 			<Routes>
-				<Route path=':id' element={<StudiosItem studios={studios}/>}/>
-				<Route path='/' element={<StudiosList studios={studios}/>}/>
+				<Route path=':id' element={<StudiosItem />}/>
+				<Route path='/' element={<StudiosList />}/>
 				<Route path='new' element={<Navigate to='/studios/new/:id'/>} />
 			</Routes>
 		</>

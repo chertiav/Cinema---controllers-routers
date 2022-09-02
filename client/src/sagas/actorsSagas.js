@@ -1,6 +1,6 @@
 import { put } from 'redux-saga/effects';
 import dataService from '../API/cinema-service';
-import { createActorError, createActorRequest, createActorSuccess, deleteActorError, deleteActorRequest, deleteActorSuccess, getAllActorsError, getAllActorsRequest, getAllActorsSuccess, updateActorError, updateActorRequest, updateActorSuccess  } from '../store/actions/actorsActions';
+import { createActorError, createActorRequest, createActorSuccess, deleteActorError, deleteActorRequest, deleteActorSuccess, getAllActorsError, getAllActorsRequest, getAllActorsSuccess, getOneActorError, getOneActorRequest, getOneActorSuccess, updateActorError, updateActorRequest, updateActorSuccess  } from '../store/actions/actorsActions';
 
 
 export function* getAllActorsSaga() {
@@ -11,6 +11,16 @@ export function* getAllActorsSaga() {
 		yield put(getAllActorsSuccess(actors))
 	} catch (error) {
 		yield put(getAllActorsError(error))
+	}
+}
+export function* getOneActorSaga({payload}) {
+	yield put(getOneActorRequest());
+	try {
+		const actor = yield dataService.get(`/actors/${payload}`)
+			.then(({data}) => data);
+		yield put(getOneActorSuccess(actor))
+	} catch (error) {
+		yield put(getOneActorError(error))
 	}
 }
 export function* createActorSaga({payload}) {
@@ -26,7 +36,7 @@ export function* createActorSaga({payload}) {
 export function* updateActorSaga({payload}) {
 	yield put(updateActorRequest());
 	try {
-		const updateActor = yield dataService.put(`/actors/${payload.id}`, payload)
+		const updateActor = yield dataService.put(`/actors`, payload)
 			.then(({data}) => data);
 		yield put(updateActorSuccess(updateActor))
 	} catch (error) {

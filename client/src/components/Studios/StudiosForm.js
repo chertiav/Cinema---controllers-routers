@@ -16,14 +16,14 @@ import { createStudioAction, updateStudioAction } from '../../store/actions/stud
 
 const style ={
 	styleSelectedFirst: {
-		padding:'5px',
-		fontSize:"1rem",
+		padding:'2px',
+		fontSize:"0.7rem",
 		outline:'none',
 		borderRadius:'4px'
 	},
 	styleSelectedSecond : {
 		padding:'5px',
-		fontSize:"1rem",
+		fontSize:"0.7rem",
 		outline:'none',
 		borderRadius:'4px',
 		width:'100%',
@@ -55,37 +55,26 @@ function StudiosForm() {
 	const dispatch = useDispatch();
 	const {studiosList: {studios}} = useSelector(state => state);
 	const navigate = useNavigate();
-	const currentStudio = studios.find(studio => studio.id === parseInt(id));
+	const currentStudio = studios.find(studio => studio.studio_id === parseInt(id));
 	const goHome = () => navigate('/studios');
-	const onStudioSubmit = (values, actions) => {
-		!values.id
-			? dispatch(createStudioAction({...values, id: Date.now()}))
-			: dispatch(updateStudioAction(values));
+	const onStudioSubmit = (values) => {
+		const newValues = {...values}
+		if (newValues.found_year === "") {
+			newValues.found_year = null
+		}
+		!values.studio_id
+			? dispatch(createStudioAction(newValues))
+			: dispatch(updateStudioAction(newValues));
 		goHome();
 	};
 	const schema = Yup.object().shape({
 		title: Yup.string()
 			.required('Field is required'),
-		foundationYear: Yup.number()
-			.required('Field is required'),
-		location: Yup.string()
-			.required('Field is required'),
 	});
-	const createYearList =() => {
-		let arrayYear = [];
-		for (let year = 1900; year < (new Date().getFullYear()-10); year++) {
-			arrayYear.push(year)
-		}
-		return arrayYear
-	}
-	const arrayYear = createYearList();
-
 	const withLabel = 2.5;
 	const withInput = 9.5;
-	const withInputYear = 2;
-	const withErrorYear = 4.5;
-	const withInputNationality = 5;
-	const withErrorNationality = 7.5;
+	const withInputYear = 2.5;
+	const withInputNationality = 4;
 	const defaultColor = 'rgb(25, 118, 210)';
 
 	const renderForm = (props) => {
@@ -107,15 +96,14 @@ function StudiosForm() {
 				<Stack >
 					<Grid container marginTop={1} marginBottom={1} flexDirection='row' spacing={1} alignItems={'center'}>
 						<Grid item color = {defaultColor} lg={withLabel} md={withLabel} xl={withLabel} sm={withLabel} xs={withLabel}>
-							<label htmlFor='foundationYear'>Foundation year</label>
+							<label htmlFor='found_year'>Foundation year</label>
 						</Grid>
 						<Grid item color = {defaultColor} lg={withInputYear} md={withInputYear} xl={withInputYear} sm={withInputYear} xs={withInputYear}>
-							<Field name='foundationYear' as="select" style={style.styleSelectedFirst}>
-								<option disabled value=''>year</option>
-								{arrayYear.map(year =>
-									<option key={year} value={year}>{year}</option>
-								)}
-							</Field>
+						<Field
+								name='found_year'
+								type='date'
+								style={style.styleSelectedFirst}
+								/>
 
 						</Grid>
 						<Grid item color = {defaultColor} lg={withLabel} md={withLabel} xl={withLabel} sm={withLabel} xs={withLabel}>
@@ -130,18 +118,6 @@ function StudiosForm() {
 							</Field>
 						</Grid>
 					</Grid>
-					<Grid container flexDirection='row' spacing={1} alignItems={'center'}>
-						<Grid item lg={withErrorYear} md={withErrorYear} xl={withErrorYear} sm={withErrorYear} xs={withErrorYear}>
-							<ErrorMessage name='foundationYear'>
-								{msg => <Stack alignItems={'center'} className="error">{msg}</Stack>}
-							</ErrorMessage>
-						</Grid>
-						<Grid item lg={withErrorNationality} md={withErrorNationality} xl={withErrorNationality} sm={withErrorNationality} xs={withErrorNationality}>
-							<ErrorMessage name='location'>
-								{msg => <Stack alignItems={'center'} className="error">{msg}</Stack>}
-							</ErrorMessage>
-						</Grid>
-					</Grid>
 				</Stack>
 				<fieldset style={style.fieldsetStyle}>
 					<legend style={style.legendStyle}>
@@ -151,7 +127,7 @@ function StudiosForm() {
 						{({push, remove, form: {values: {movies}}}) => {
 							return (
 								<Stack spacing={2}>
-									{movies.map((_, index) => (
+									{movies.map(element => element ? element : '').map((_, index) => (
 										<Stack key={index} direction="row" spacing={2}>
 											<Field name={`movies[${index}]`} placeholder='movie'></Field>
 											{index > 0 && (

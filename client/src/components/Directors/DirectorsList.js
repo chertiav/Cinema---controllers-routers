@@ -1,10 +1,10 @@
 import { Button, Grid, Stack } from '@mui/material';
-import React from 'react'
+import React, { useEffect } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
-import { deleteDirectorAction } from '../../store/actions/directorsActions';
-import { useDispatch } from 'react-redux';
+import { deleteDirectorAction, getAllDirectorsAction } from '../../store/actions/directorsActions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const mainListStyle = {
 	display: 'flex',
@@ -30,9 +30,15 @@ const mainListItemTitleStyle = {
 	backgroundColor: 'rgb(224, 224, 224)',
 }
 
-function DirectorsList({directors}) {
+function DirectorsList() {
 
+	const {directorsList: {directors}} = useSelector(state => state);
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(getAllDirectorsAction())
+	}, [dispatch]);
+
 	const onDelete = (id) => {
 		dispatch(deleteDirectorAction(id));
 	}
@@ -53,18 +59,18 @@ function DirectorsList({directors}) {
 			{directors.length
 			?	<ul style={mainListStyle}>
 					{directors.map(director => (
-						<li style={mainListItemStyle} key={director.id}>
+						<li style={mainListItemStyle} key={director.director_id}>
 							<Link
-								to={`${director.id}`}
+								to={`${director.director_id}`}
 								style={mainListItemTitleStyle}
 								onMouseEnter={handleMouseEnter}
 								onMouseLeave={handleMouseLeave}
 								onMouseDown={handleMouseDown}
 							>
-								{director.fullName}
+								{director.full_name}
 							</Link>
 							<Stack marginRight={1}>
-								<Link to={`new/${director.id}`} >
+								<Link to={`new/${director.director_id}`} >
 									<Button
 										variant="contained"
 										color = 'warning'
@@ -79,7 +85,7 @@ function DirectorsList({directors}) {
 									color = 'error'
 									size='large'
 									startIcon={<DeleteIcon/>}
-									onClick={() => onDelete(director.id)}
+									onClick={() => onDelete(director.director_id)}
 								/>
 							</Stack>
 						</li>

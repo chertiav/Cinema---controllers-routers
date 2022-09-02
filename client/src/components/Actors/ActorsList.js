@@ -1,10 +1,10 @@
 import { Button, Grid, Stack } from '@mui/material';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useDispatch } from 'react-redux';
-import { deleteActorAction } from '../../store/actions/actorsActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteActorAction, getAllActorsAction } from '../../store/actions/actorsActions';
 
 const mainListStyle = {
 	display: 'flex',
@@ -30,11 +30,18 @@ const mainListItemTitleStyle = {
 	backgroundColor: 'rgb(224, 224, 224)',
 }
 
-function ActorsList({actors}) {
+function ActorsList() {
 
+	const {actorsList: {actors}} = useSelector(state => state);
 	const dispatch = useDispatch();
 
-	const onDelete = (id) => dispatch(deleteActorAction(id));
+	useEffect(() => {
+		dispatch(getAllActorsAction())
+	}, [dispatch]);
+
+	const onDelete = (id) => {
+		dispatch(deleteActorAction(id));
+	};
 
 	const handleMouseEnter = (event) => {
 		event.target.style.backgroundColor = '#ffff';
@@ -53,18 +60,18 @@ function ActorsList({actors}) {
 			{actors.length
 			?	<ul style={mainListStyle}>
 					{actors.map(actor =>(
-						<li style={mainListItemStyle} key={actor.id}>
+						<li style={mainListItemStyle} key={actor.actor_id}>
 							<Link
-								to={`${actor.id}`}
+								to={`${actor.actor_id}`}
 								style={mainListItemTitleStyle}
 								onMouseEnter={handleMouseEnter}
 								onMouseLeave={handleMouseLeave}
 								onMouseDown={handleMouseDown}
 							>
-								{actor.fullName}
+								{actor.full_name}
 							</Link>
 							<Stack marginRight={1}>
-								<Link to={`new/${actor.id}`} >
+								<Link to={`new/${actor.actor_id}`} >
 									<Button
 										variant="contained"
 										color = 'warning'
@@ -79,7 +86,7 @@ function ActorsList({actors}) {
 									color = 'error'
 									size='large'
 									startIcon={<DeleteIcon/>}
-									onClick={() => onDelete(actor.id)}
+									onClick={() => onDelete(actor.actor_id)}
 								/>
 							</Stack>
 						</li>

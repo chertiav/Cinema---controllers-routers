@@ -1,7 +1,10 @@
 import { Box, Button, Grid, Stack } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emptyMovie } from '../../model/model';
+import { getOneMovieAction } from '../../store/actions/moviesActions';
+
 
 const imgContainerStyle = {
   position: 'relative',
@@ -39,14 +42,24 @@ const itemTitleStyle = {
   color: 'rgb(25, 118, 210)'
 }
 
-function MovieItem({movies}) {
+function MovieItem() {
 
 	const {id} = useParams();
-	const film = movies.find(movie => movie.id === parseInt(id));
+	console.log(id);
+
+
+	const dispatch = useDispatch();
+	const {moviesList: {movies}} = useSelector(state => state);
+	const [film] = movies;
+	const movie = film ? film : emptyMovie;
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		dispatch(getOneMovieAction(id))
+	}, [dispatch, id]);
+
 	const withGridBlockImg = 4;
 	const withGridBlockContent = 8;
-	const movie = film ? film : emptyMovie;
 
 	return (
 		<Box>
@@ -69,16 +82,24 @@ function MovieItem({movies}) {
 							{movie.title}
 						</li>
 						<li style={itemStyle}>
-							<span style={itemTitleStyle}>director: </span>
+							<span style={itemTitleStyle}>release year: </span>
+							{movie.release_year}
+						</li>
+						<li style={itemStyle}>
+							<span style={itemTitleStyle}>genre: </span>
+							{movie.genre}
+						</li>
+						<li style={itemStyle}>
+							<span style={itemTitleStyle}>studio: </span>
+							{movie.studio}
+						</li>
+						<li style={itemStyle}>
+							<span style={itemTitleStyle}>directors: </span>
 							{movie.directors.join(', ')}
 						</li>
 						<li style={itemStyle}>
 							<span style={itemTitleStyle}>actors: </span>
 							{movie.actors.join(', ')}
-						</li>
-						<li style={itemStyle}>
-							<span style={itemTitleStyle}>studios: </span>
-							{movie.studios.join(', ')}
 						</li>
 					</ul>
 					<Button
